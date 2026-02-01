@@ -4,6 +4,8 @@ import matplotlib.pyplot as plt
 import networkx as nx
 import numpy as np
 
+seed = 42
+
 # Define colors and graph example
 colors = ['blue', 'green', 'red']
 nodes = ['A', 'B', 'C', 'D', 'E', 'F']
@@ -13,9 +15,10 @@ edges = [('A', 'B'),('A', 'C'),('B', 'C'),('C', 'D'),('D', 'F'),('D', 'E'), ('C'
 G = nx.Graph()
 G.add_nodes_from(nodes, color='white', possibilities=None, previous=None) # White is considered as a non-affected color propriety
 G.add_edges_from(edges)
+pos = nx.spring_layout(G, seed=seed)
 
 # Show example
-nx.draw(G, with_labels = True, node_color='white', node_size=800) # Uncolored initial graph
+nx.draw(G, pos=pos, with_labels = True, node_color='white', node_size=800) # Uncolored initial graph
 plt.show()
 
 ### Coloring algorithm variables
@@ -77,5 +80,5 @@ while 'white' in color_assignement.values(): # while all nodes have not been col
     # Remove current node from remaining nodes
     remaining_nodes.remove(current_node)
 
-nx.draw(G, with_labels = True, node_color=color_assignement.values(), node_size=800)# initial graph
+nx.draw(G, pos = pos, with_labels = True, node_color=color_assignement.values(), node_size=800)# initial graph
 plt.show()
