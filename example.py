@@ -8,8 +8,11 @@ seed = 42
 
 # Define colors and graph example
 colors = ['blue', 'green', 'red']
-nodes = ['A', 'B', 'C', 'D', 'E', 'F']
-edges = [('A', 'B'),('A', 'C'),('B', 'C'),('C', 'D'),('D', 'F'),('D', 'E'), ('C', 'E'), ('C', 'F')]
+nodes = ['A','B','C','D']
+edges = [
+    ('A','B'),('A','C'),('A','D'),
+    ('B','C'),('B','D'),('C','D')
+]
 
 # Use Networkx to build corresponding graph
 G = nx.Graph()
@@ -41,6 +44,7 @@ color_assignement[first_node] = colors[0] # Always priorize the order of color l
 treated_nodes.append(first_node)
 remaining_nodes.remove(first_node)
 
+loop_breaker = False
 while 'white' in color_assignement.values(): # while all nodes have not been colored yet
 
     # Get current node according to its colored neighbours and get possible colors from it
@@ -67,18 +71,28 @@ while 'white' in color_assignement.values(): # while all nodes have not been col
         possible_colors[node] = list(set(colors) - set(neighbours_colors)) # List possible color for each node
         n_colored_neighbours[node] = len(neighbours_colors) # Count number of unique color in neighbouhood
 
-    # Sort remaining nodes according to number of colored neighbours and select first one
-    n_colored_neighbours_sorted = dict(sorted(n_colored_neighbours.items(), key=lambda kv_tuple: kv_tuple[1], reverse = True))
-    remaining_nodes = list(n_colored_neighbours_sorted.keys())
-    current_node = remaining_nodes[0]
+        # Check for an impossible case
+        if [] in possible_colors.values():
+            print("There's no way I can color this with only 3 colors !")
+            loop_breaker = True
+            break
 
-    # Assign a color to current node
-    color_assignement[current_node] = possible_colors[current_node][0]
+    if loop_breaker:
+        break
 
-    # Mark current node as treated
-    treated_nodes.append(current_node)
-    # Remove current node from remaining nodes
-    remaining_nodes.remove(current_node)
+    else:
+        # Sort remaining nodes according to number of colored neighbours and select first one
+        n_colored_neighbours_sorted = dict(sorted(n_colored_neighbours.items(), key=lambda kv_tuple: kv_tuple[1], reverse = True))
+        remaining_nodes = list(n_colored_neighbours_sorted.keys())
+        current_node = remaining_nodes[0]
+
+        # Assign a color to current node
+        color_assignement[current_node] = possible_colors[current_node][0]
+
+        # Mark current node as treated
+        treated_nodes.append(current_node)
+        # Remove current node from remaining nodes
+        remaining_nodes.remove(current_node)
 
 nx.draw(G, pos = pos, with_labels = True, node_color=color_assignement.values(), node_size=800)# initial graph
 plt.show()
