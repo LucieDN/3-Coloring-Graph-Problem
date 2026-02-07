@@ -1,10 +1,113 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <title>3-coloring problem website</title>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="description" content="Graph 3-Coloring App - Hosted on GitHub Pages" />
+  <title>Graph 3-Coloring App</title>
+
+  <!-- Styles -->
+  <link rel="stylesheet" href="style.css" />
+
+  <!-- Python Execution -->
+  <script src="https://cdn.jsdelivr.net/pyodide/v0.25.0/full/pyodide.js"></script>
 </head>
+
 <body>
-    <h1>Welcome to my first website!</h1>
+    <main class="container">
+    <header class="mb-4 text-center">
+      <h1 id="app-name">Graph 3-Coloring App</h1>
+      <p id="app-description">Developed by Lucie Della-Negra as project-based learning</p>
+    </header>
+    
+
+    <section class="card">
+        <h2>Try coloring your own graph !</h2>
+        <p>
+            For the moment, you can only show the graph you selected through its edges.
+        </p>
+        
+        <!-- Inputs -->
+        <label>Note the edges that define your graph:</label><br>
+        <textarea id="edgesInput">[('A','B'),('A','C'),('A','D'),('B','C'),('B','D')]</textarea>
+
+        <button onclick="plotGraph()">Show corresponding graph</button>
+
+        <div id="output" class="graph-output"></div>
+    </section>
+
+    <footer class="mt-4 text-center">
+      <p>
+        © <span id="year"></span> 
+        <span id="author-name">Lucie Della-Negra</span>
+      </p>
+    </footer>
+
+  <script>
+    // Set current year
+    document.getElementById("year").textContent = new Date().getFullYear();
+
+    // Execute python code
+    let pyodideReady = loadPyodide({
+      stdout: (text) => console.log(text),
+      stderr: (text) => console.error(text)
+    });
+
+    // Python execution - Plot uncolored graph with user inputs
+    async function plotGraph() {
+      const pyodide = await pyodideReady;
+
+      // Clear previous output
+      document.getElementById("output").innerHTML = "";
+
+      // Load required Python packages
+      await pyodide.loadPackage(["matplotlib", "networkx"]);
+
+      // Get user inputs as raw strings
+      const edgesStr = document.getElementById("edgesInput").value;
+
+      // Inject inputs into Python
+      pyodide.globals.set("edges_str", edgesStr);
+
+      await pyodide.runPythonAsync(`
+import ast
+import networkx as nx
+import matplotlib.pyplot as plt
+from js import document
+
+seed = 42
+
+# Define colors
+colors = ['blue', 'green', 'red']
+
+# Safely parse Python literals
+edges = ast.literal_eval(edges_str)
+
+# Use Networkx to build corresponding graph
+G = nx.Graph()
+G.add_edges_from(edges)
+pos = nx.spring_layout(G, seed=seed)
+
+# Show example
+plt.figure(figsize=(8,4), dpi=120)
+nx.draw(G, pos=pos, with_labels = True, node_color='white', node_size=800) # Uncolored initial graph
+
+# Render to browser
+import io, base64
+buf = io.BytesIO()
+plt.savefig(buf, format="png")
+plt.close()
+buf.seek(0)
+
+img_base64 = base64.b64encode(buf.read()).decode("utf-8")
+img = document.createElement("img")
+img.src = "data:image/png;base64," + img_base64
+
+document.getElementById("output").appendChild(img)
+`);
+      document.getElementById("output").textContent = result;
+    }
+    
+  </script>
 </body>
 </html>
