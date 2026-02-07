@@ -1,5 +1,4 @@
 ### Imports and definitions
-import plotly.graph_objects as go
 import matplotlib.pyplot as plt
 import networkx as nx
 import numpy as np
@@ -8,7 +7,6 @@ seed = 42
 
 # Define colors and graph example
 colors = ['blue', 'green', 'red']
-nodes = ['A','B','C','D']
 edges = [
     ('A','B'),('A','C'),('A','D'),
     ('B','C'),('B','D'),('C','D')
@@ -16,7 +14,6 @@ edges = [
 
 # Use Networkx to build corresponding graph
 G = nx.Graph()
-G.add_nodes_from(nodes, color='white', possibilities=None, previous=None) # White is considered as a non-affected color propriety
 G.add_edges_from(edges)
 pos = nx.spring_layout(G, seed=seed)
 
