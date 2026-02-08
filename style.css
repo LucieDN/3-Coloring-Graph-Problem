@@ -88,6 +88,21 @@ button:hover {
   background: var(--primary-hover);
 }
 
+/* ===== Disabled Buttons ===== */
+button:disabled,
+button[disabled] {
+  background: var(--border-color);
+  color: var(--muted-text);
+  cursor: not-allowed;
+  opacity: 0.75;
+}
+
+/* Prevent hover effects when disabled */
+button:disabled:hover,
+button[disabled]:hover {
+  background: var(--border-color);
+}
+
 /* ===== Forms ===== */
 input,
 textarea,

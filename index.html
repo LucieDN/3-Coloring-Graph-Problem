@@ -31,7 +31,7 @@
         <label>Note the edges that define your graph:</label><br>
         <textarea id="edgesInput">[('A','B'),('A','C'),('A','D'),('B','C'),('B','D')]</textarea>
 
-        <button onclick="plotGraph()">Show corresponding graph</button>
+        <button id="plotBtn" class="button" onclick="plotGraph()" disabled="disabled">Show corresponding graph</button>
 
         <div id="output" class="graph-output"></div>
     </section>
@@ -44,24 +44,31 @@
     </footer>
 
   <script>
+    let pyodide = null;
+    
     // Set current year
     document.getElementById("year").textContent = new Date().getFullYear();
 
-    // Execute python code
-    let pyodideReady = loadPyodide({
+    // Import python environmnent - Used when window is loading
+    async function initPyodide() {
+        pyodide = await loadPyodide({
       stdout: (text) => console.log(text),
       stderr: (text) => console.error(text)
     });
 
+        // Preload Python packages ONCE
+        await pyodide.loadPackage(["matplotlib", "networkx"]);
+        plotGraph.call()
+        document.getElementById("plotBtn").disabled = false;
+    }
+    
+    // Run on page load
+    window.addEventListener("DOMContentLoaded", initPyodide);
+
     // Python execution - Plot uncolored graph with user inputs
     async function plotGraph() {
-      const pyodide = await pyodideReady;
-
       // Clear previous output
       document.getElementById("output").innerHTML = "";
-
-      // Load required Python packages
-      await pyodide.loadPackage(["matplotlib", "networkx"]);
 
       // Get user inputs as raw strings
       const edgesStr = document.getElementById("edgesInput").value;
@@ -105,7 +112,6 @@ img.src = "data:image/png;base64," + img_base64
 
 document.getElementById("output").appendChild(img)
 `);
-      document.getElementById("output").textContent = result;
     }
     
   </script>
