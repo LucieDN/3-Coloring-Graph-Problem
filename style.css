@@ -149,7 +149,7 @@ select:focus {
   justify-content: center;
   align-items: center;
   padding: 1rem;
-  min-height: 300px;
+  min-height: 350px;
 }
 
 .graph-output img {
