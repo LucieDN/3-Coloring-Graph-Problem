@@ -33,7 +33,12 @@
 
         <button id="plotBtn" class="button" onclick="plotGraph()" disabled="disabled">Show corresponding graph</button>
 
-        <div id="output" class="graph-output"></div>
+        <div id="output" class="graph-output d-flex flex-column">
+            <div id="loader" class="loader-inline">
+                <div class="spinner"></div>
+                <span class="loader-text">Loading Python environment, please wait...</span>
+            </div>
+        </div>
     </section>
 
     <footer class="mt-4 text-center">
@@ -52,9 +57,9 @@
     // Import python environmnent - Used when window is loading
     async function initPyodide() {
         pyodide = await loadPyodide({
-      stdout: (text) => console.log(text),
-      stderr: (text) => console.error(text)
-    });
+            stdout: (text) => console.log(text),
+            stderr: (text) => console.error(text)
+        });
 
         // Preload Python packages ONCE
         await pyodide.loadPackage(["matplotlib", "networkx"]);
