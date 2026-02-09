@@ -63,6 +63,14 @@
 
         // Preload Python packages ONCE
         await pyodide.loadPackage(["matplotlib", "networkx"]);
+        
+        // Fetch and inject config in Python
+        const response = await fetch("./config.json");
+        const config = await response.json();
+        
+        pyodide.globals.set("global_vars", pyodide.toPy(config));
+
+        // Plot the first graph
         plotGraph.call()
 
         // Activate button once it is done
@@ -74,7 +82,7 @@
 
     // Python execution - Plot uncolored graph with user inputs
     async function plotGraph() {
-
+      
       // Get user inputs as raw strings
       const edgesStr = document.getElementById("edgesInput").value;
 
@@ -90,10 +98,7 @@ import networkx as nx
 import matplotlib.pyplot as plt
 from js import document
 
-seed = 42
-
-# Define colors
-colors = ['blue', 'green', 'red']
+seed = global_vars["seed"]
 
 # Safely parse Python literals
 edges = ast.literal_eval(edges_str)
