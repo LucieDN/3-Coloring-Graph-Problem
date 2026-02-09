@@ -64,6 +64,8 @@
         // Preload Python packages ONCE
         await pyodide.loadPackage(["matplotlib", "networkx"]);
         plotGraph.call()
+
+        // Activate button once it is done
         document.getElementById("plotBtn").disabled = false;
     }
     
@@ -72,14 +74,15 @@
 
     // Python execution - Plot uncolored graph with user inputs
     async function plotGraph() {
-      // Clear previous output
-      document.getElementById("output").innerHTML = "";
 
       // Get user inputs as raw strings
       const edgesStr = document.getElementById("edgesInput").value;
 
       // Inject inputs into Python
       pyodide.globals.set("edges_str", edgesStr);
+
+      // Clear previous output
+      document.getElementById("output").innerHTML = "";
 
       await pyodide.runPythonAsync(`
 import ast
