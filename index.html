@@ -31,7 +31,7 @@
         <label>Note the edges that define your graph:</label><br>
         <textarea id="edgesInput">[('A','B'),('A','C'),('A','D'),('B','C'),('B','D')]</textarea>
         </br>
-        <button id="plotBtn" class="button" onclick="plotGraph()" disabled="disabled">Show corresponding graph</button>
+        <button id="plotBtn" class="button" onclick="updateGraph()" disabled="disabled">Show corresponding graph</button>
 
         <div id="output" class="graph-output d-flex flex-column">
             <div id="loader" class="loader-inline">
@@ -71,60 +71,25 @@
         pyodide.globals.set("global_vars", pyodide.toPy(config));
 
         // Plot the first graph
-        plotGraph.call()
-
+        updateGraph.call()
         // Activate button once it is done
-        document.getElementById("plotBtn").disabled = false;
+        .then(() => document.getElementById("plotBtn").disabled = false)   
     }
     
     // Run on page load
     window.addEventListener("DOMContentLoaded", initPyodide);
 
     // Python execution - Plot uncolored graph with user inputs
-    async function plotGraph() {
+    async function updateGraph() {
       
       // Get user inputs as raw strings
       const edgesStr = document.getElementById("edgesInput").value;
 
       // Inject inputs into Python
       pyodide.globals.set("edges_str", edgesStr);
-
-      // Clear previous output
-      document.getElementById("output").innerHTML = "";
-
-      await pyodide.runPythonAsync(`
-import ast
-import networkx as nx
-import matplotlib.pyplot as plt
-from js import document
-
-seed = global_vars["seed"]
-
-# Safely parse Python literals
-edges = ast.literal_eval(edges_str)
-
-# Use Networkx to build corresponding graph
-G = nx.Graph()
-G.add_edges_from(edges)
-pos = nx.spring_layout(G, seed=seed)
-
-# Show example
-plt.figure(figsize=(8,4), dpi=120)
-nx.draw(G, pos=pos, with_labels = True, node_color='white', node_size=800) # Uncolored initial graph
-
-# Render to browser
-import io, base64
-buf = io.BytesIO()
-plt.savefig(buf, format="png")
-plt.close()
-buf.seek(0)
-
-img_base64 = base64.b64encode(buf.read()).decode("utf-8")
-img = document.createElement("img")
-img.src = "data:image/png;base64," + img_base64
-
-document.getElementById("output").appendChild(img)
-`);
+      
+      // Run python code that plots current graph
+      pyodide.runPython(await (await fetch("plot_graph.py")).text());
     }
     
   </script>
