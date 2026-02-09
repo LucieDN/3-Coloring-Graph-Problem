@@ -9,8 +9,10 @@
   <!-- Styles -->
   <link rel="stylesheet" href="style.css" />
 
-  <!-- Python Execution -->
+  <!-- Import scripts -->
   <script src="https://cdn.jsdelivr.net/pyodide/v0.25.0/full/pyodide.js"></script>
+  <script type="text/javascript" src="assets/scripts/initPyodide.js"></script>
+  <script type="text/javascript" src="assets/scripts/updateGraph.js"></script>
 </head>
 
 <body>
@@ -48,50 +50,12 @@
       </p>
     </footer>
 
-  <script>
-    let pyodide = null;
-    
+  <script>    
     // Set current year
     document.getElementById("year").textContent = new Date().getFullYear();
-
-    // Import python environmnent - Used when window is loading
-    async function initPyodide() {
-        pyodide = await loadPyodide({
-            stdout: (text) => console.log(text),
-            stderr: (text) => console.error(text)
-        });
-
-        // Preload Python packages ONCE
-        await pyodide.loadPackage(["matplotlib", "networkx"]);
-        
-        // Fetch and inject config in Python
-        const response = await fetch("./config.json");
-        const config = await response.json();
-        
-        pyodide.globals.set("global_vars", pyodide.toPy(config));
-
-        // Plot the first graph
-        updateGraph.call()
-        // Activate button once it is done
-        .then(() => document.getElementById("plotBtn").disabled = false)   
-    }
     
     // Run on page load
     window.addEventListener("DOMContentLoaded", initPyodide);
-
-    // Python execution - Plot uncolored graph with user inputs
-    async function updateGraph() {
-      
-      // Get user inputs as raw strings
-      const edgesStr = document.getElementById("edgesInput").value;
-
-      // Inject inputs into Python
-      pyodide.globals.set("edges_str", edgesStr);
-      
-      // Run python code that plots current graph
-      pyodide.runPython(await (await fetch("plot_graph.py")).text());
-    }
-    
   </script>
 </body>
 </html>
