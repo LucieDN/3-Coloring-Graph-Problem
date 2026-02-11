@@ -20,6 +20,9 @@ async function initPyodide() {
     // Plot the first graph
     updateGraph.call()
     // Activate button once it is done
-    .then(() => document.getElementById("plotBtn").disabled = false)
+    .then(() => {
+        document.getElementById("colorBtn").disabled = false;
+        document.getElementById("plotBtn").disabled = false;
+    })
     .then(() => console.log("Python environment is all set up"));
 }
