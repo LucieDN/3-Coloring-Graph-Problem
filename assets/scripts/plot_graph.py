@@ -1,10 +1,3 @@
-import ast
-import networkx as nx
-import matplotlib.pyplot as plt
-from js import document
-
-seed = global_vars["seed"]
-
 # Safely parse Python literals
 edges = ast.literal_eval(edges_str)
 

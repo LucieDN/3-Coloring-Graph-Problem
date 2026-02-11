@@ -17,7 +17,8 @@ async function initPyodide() {
     pyodide.globals.set("global_vars", pyodide.toPy(config));
     console.log("Config.json file is loaded and injected in Python environment");
 
-    // Plot the first graph
+    // Setup python config and plot the first graph
+    pyodide.runPython(await (await fetch("assets/scripts/setup_config.py")).text());
     updateGraph.call()
     // Activate button once it is done
     .then(() => {
