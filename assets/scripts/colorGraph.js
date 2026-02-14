@@ -26,7 +26,10 @@ async function colorGraph() {
         dialog.remove();
 });
   }
-  else{
+  else if (document.getElementById('show_details').checked) {
+            alert("checked");
+  }
+  else {
     img = document.createElement("img")
     img.src = "data:image/png;base64," + result
 

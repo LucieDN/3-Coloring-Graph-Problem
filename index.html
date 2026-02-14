@@ -35,6 +35,12 @@
         <label for="edgesInput">Note the edges that define your graph:</label><br>
         <textarea id="edgesInput">[('A','B'),('A','C'),('A','D'),('B','C'),('B','D')]</textarea>
         </br>
+
+        <div>
+          <input type="checkbox" id="show_details" checked />
+          <label for="coding">Show coloring details</label>
+        </div>
+
         <button id="colorBtn" class="button" onclick="colorGraph()" disabled="disabled">Try coloring graph</button>
 
         <div id="output" class="graph-output d-flex flex-column">

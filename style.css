@@ -104,12 +104,11 @@ button[disabled]:hover {
 }
 
 /* ===== Forms ===== */
-input,
+/* input, */
 textarea,
 select {
   width: 100%;
   padding: 0.6rem;
-  margin-bottom: 1rem;
   border-radius: var(--radius);
   border: 1px solid var(--border-color);
   font-size: 0.95rem;
@@ -217,4 +216,9 @@ dialog {
 
     /* Optional styling */
     box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+}
+
+.checkbox{
+  width: auto;
+  text-align: left;
 }
