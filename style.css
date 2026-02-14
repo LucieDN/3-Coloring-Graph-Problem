@@ -199,3 +199,22 @@ select:focus {
   height: 24px;
   border-width: 3px;
 }
+
+/* ===== Dialog ===== */
+dialog {
+    padding: 25px;
+    border: none;
+    border-radius: 12px;
+    max-width: 400px;
+    width: 90%;
+    text-align: center;
+
+    /* Centering */
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+
+    /* Optional styling */
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+}
