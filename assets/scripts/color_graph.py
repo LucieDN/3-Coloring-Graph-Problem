@@ -47,18 +47,18 @@ def color_graph(G, colors, pos):
             # Check for an impossible case
             if [] in possible_colors.values():
                 return "IMPOSSIBLE COLORING"
-            
-        else:
-            # Sort remaining nodes according to number of colored neighbours and select first one
-            n_colored_neighbours_sorted = dict(sorted(n_colored_neighbours.items(), key=lambda kv_tuple: kv_tuple[1], reverse = True))
-            remaining_nodes = list(n_colored_neighbours_sorted.keys())
-            current_node = remaining_nodes[0]
+        
+        # Sort remaining nodes according to number of colored neighbours and select first one
+        n_colored_neighbours_sorted = dict(sorted(n_colored_neighbours.items(), key=lambda kv_tuple: kv_tuple[1], reverse = True))
+        remaining_nodes = list(n_colored_neighbours_sorted.keys())
+        current_node = remaining_nodes[0]
 
-            # Assign a color to current node
-            color_assignement[current_node] = possible_colors[current_node][0]
+        # Assign a color to current node
+        color_assignement[current_node] = possible_colors[current_node][0]
 
-            # Remove current node from remaining nodes
-            remaining_nodes.remove(current_node)
+        # Remove current node from remaining nodes
+        remaining_nodes.remove(current_node)
+        node_order.append(current_node)
 
     # Draw corresponding graph
     plt.figure(figsize=(8,4), dpi=120)
