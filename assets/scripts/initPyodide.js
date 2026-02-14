@@ -23,7 +23,6 @@ async function initPyodide() {
     // Activate button once it is done
     .then(() => {
         document.getElementById("colorBtn").disabled = false;
-        document.getElementById("plotBtn").disabled = false;
     })
     .then(() => console.log("Python environment is all set up"));
 }

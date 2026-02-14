@@ -1,5 +1,8 @@
 // Python execution - color current graph
 async function colorGraph() {
+  // Start by updating plotted graph
+  updateGraph.call()
+
   // Run python code that color current graph
   let result = pyodide.runPython(await (await fetch("assets/scripts/color_graph.py")).text());
   
