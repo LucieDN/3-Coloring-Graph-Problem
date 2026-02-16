@@ -1,6 +1,8 @@
 def color_graph(G, colors, pos):
     ### Coloring algorithm variables
     color_assignement = dict(zip(G.nodes(), ['white' for node in G.nodes()])) # Current color solution dictionnary
+    ### Record node order coloration for showing details option
+    node_order = []
 
     ### Get first node according to number of neighbours
     n_edges = {}
@@ -10,6 +12,7 @@ def color_graph(G, colors, pos):
 
     remaining_nodes = list(n_edges_sorted.keys())
     first_node = remaining_nodes[0]
+    node_order.append(first_node)
 
     ### Assign a color to first node
     color_assignement[first_node] = colors[0] # Always priorize the order of color list
@@ -71,6 +74,6 @@ def color_graph(G, colors, pos):
     buf.seek(0)
 
     img_base64 = base64.b64encode(buf.read()).decode("utf-8")
-    return img_base64
+    return [img_base64, color_assignement, node_order]
 
 color_graph(G, colors, pos)    
