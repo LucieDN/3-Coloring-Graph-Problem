@@ -17,7 +17,6 @@ def color_graph(G, colors, pos):
     ### Mark first node as treated and remove it from remaining nodes
     remaining_nodes.remove(first_node)
 
-    loop_breaker = False
     while 'white' in color_assignement.values(): # while there is white remaining in graph
 
         # Get current node according to its colored neighbours and get possible colors from it
